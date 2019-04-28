@@ -34,7 +34,10 @@ classdef mycbar < handle
                 this.data = [];
                 for i = 1:length(this.axes.Children)
                     if isprop(this.axes.Children(i),'CData')
-                        this.data = [this.data; this.axes.Children(i).CData(:)];
+                        tmp = this.axes.Children(i).CData(:);
+                        tmp(isnan(tmp)) = [];
+                        tmp(isinf(tmp)) = [];
+                        this.data = [this.data; tmp];
                     end
                 end
             elseif nargin == 1
