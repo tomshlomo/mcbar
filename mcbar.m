@@ -1,4 +1,4 @@
-classdef mycbar < handle
+classdef mcbar < handle
     %add checkbox for include/disinclude outliers?
     %write autocompute limits algorithm / algorithms
     %add buttons for #autotune1 #autotune2 ... (general buttons)
@@ -26,7 +26,7 @@ classdef mycbar < handle
     methods
         
         %constructor function
-        function this = mycbar(axes,data)
+        function this = mcbar(axes,data)
             
             %handle inputs and configure axes and data
             if nargin<1
@@ -74,11 +74,11 @@ classdef mycbar < handle
         end
         
         %click colorbar callback
-        function cbar_click_callback(this,src,evnt)
+        function cbar_click_callback(this,~,~)
             
             %in case panel is not open - load figure and get handles
             if isempty(this.fig_panel) || ~ishandle(this.fig_panel)
-                [this.fig_panel,this.h] = guide2fig('mycbar_mainpanel.fig','WindowStyle','normal','Name','My Colorbar - Limits Controller',...
+                [this.fig_panel,this.h] = guide2fig('mcbar_mainpanel.fig','WindowStyle','normal','Name','My Colorbar - Limits Controller',...
                                                     'NumberTitle','off','MenuBar','none','ToolBar', 'none');
                 this.config_panel();
 %                 this.panel.DeleteFcn = @(src,evnt) delete(this);
@@ -127,7 +127,7 @@ classdef mycbar < handle
         %update limits method
         function set.limits(this,value)
             if value(1) == value(2)
-                if min(this.data) == max(this.data)
+                if min(this.data) == max(this.data) %#ok<*MCSUP>
                     error('Input data has only one value!');
                 else
                     warning('Setting limits failed. Setting to minimum and maximum of input data');
@@ -178,13 +178,13 @@ classdef mycbar < handle
 %             listener_xlim = addlistener(this.h_controller.main_axes,'XLim','PostSet',@(src,evnt) xlim_callback(src,evnt));
 %             listener_ylim = addlistener(this.h_controller.main_axes,'YLim','PostSet',@(src,evnt) ylim_callback(src,evnt));
 
-            function line_left_callback(src,evnt)
+            function line_left_callback(~,~)
                 this.limits(1) = line_left.Position(1,1);
                 line_left.DrawingArea = [xlims(1),ylims(1),line_right.Position(1,1)-xlims(1)-eps_x,ylims(2)-ylims(1)];
                 line_right.DrawingArea = [line_left.Position(1,1)+eps_x,ylims(1),xlims(2)-(line_left.Position(1,1)+eps_x),ylims(2)-ylims(1)];
             end
             
-            function line_right_callback(src,evnt)
+            function line_right_callback(~,~)
                 this.limits(2) = line_right.Position(1,1);
                 line_left.DrawingArea = [xlims(1),ylims(1),line_right.Position(1,1)-xlims(1)-eps_x,ylims(2)-ylims(1)];
                 line_right.DrawingArea = [line_left.Position(1,1)+eps_x,ylims(1),xlims(2)-(line_left.Position(1,1)+eps_x),ylims(2)-ylims(1)];
@@ -228,19 +228,19 @@ classdef mycbar < handle
                 'Deletable',false,'DrawingArea',[line_left.Position(1,1)+eps_x,ylims(1),xlims(2)-(line_left.Position(1,1)+eps_x),ylims(2)-ylims(1)]);
             
             %callbacks
-            listener_line_left = addlistener(line_left,'ROIMoved',@(src,evnt) line_left_callback(src,evnt));
+            listener_line_left = addlistener(line_left,'ROIMoved',@(src,evnt) line_left_callback(src,evnt)); %#ok<*NASGU>
             listener_line_right = addlistener(line_right,'ROIMoved',@(src,evnt) line_right_callback(src,evnt));
             this.h_controller.main_axes.UserData = @update_graphics;
 %             listener_xlim = addlistener(this.h_controller.main_axes,'XLim','PostSet',@(src,evnt) xlim_callback(src,evnt));
 %             listener_ylim = addlistener(this.h_controller.main_axes,'YLim','PostSet',@(src,evnt) ylim_callback(src,evnt));
             
-            function line_left_callback(src,evnt)
+            function line_left_callback(~,~)
                 this.limits(1) = line_left.Position(1,1);
                 line_left.DrawingArea = [xlims(1),ylims(1),line_right.Position(1,1)-xlims(1)-eps_x,ylims(2)-ylims(1)];
                 line_right.DrawingArea = [line_left.Position(1,1)+eps_x,ylims(1),xlims(2)-(line_left.Position(1,1)+eps_x),ylims(2)-ylims(1)];
             end
             
-            function line_right_callback(src,evnt)
+            function line_right_callback(~,~)
                 this.limits(2) = line_right.Position(1,1);
                 line_left.DrawingArea = [xlims(1),ylims(1),line_right.Position(1,1)-xlims(1)-eps_x,ylims(2)-ylims(1)];
                 line_right.DrawingArea = [line_left.Position(1,1)+eps_x,ylims(1),xlims(2)-(line_left.Position(1,1)+eps_x),ylims(2)-ylims(1)];
