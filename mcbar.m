@@ -155,6 +155,8 @@ classdef mcbar < handle
             
             %plot CDF
             ecdf(this.h_controller.main_axes,this.data);
+            % expand axis limits by 5% 
+            this.h_controller.main_axes.XLim = this.h_controller.main_axes.XLim + [-1 1]*diff(this.h_controller.main_axes.XLim )*0.05;
             this.h_controller.main_axes.Children.LineWidth = 1.5;
             grid on;
             xlims = this.h_controller.main_axes.XLim;
