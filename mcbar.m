@@ -5,6 +5,8 @@ classdef mcbar < handle
     %add button for selecting colormaps (general button)
     %think about additional buttons to histogram / CDF cases
     
+    % CHANGE TEST
+    
     properties
         axes %axes of the colorbar
         data %data for the colorbar limits
